@@ -88,6 +88,8 @@ int main() {
 
 	} while (isPlaying);
 
+	cout << "Thank your for playing out program.";
+
 	return 0;
 }
 
