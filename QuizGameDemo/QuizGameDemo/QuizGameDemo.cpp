@@ -40,8 +40,12 @@ int main() {
 
 		/* login / Sign up form: */
 		isPlaying = false;
+<<<<<<< HEAD
 		
 		cout << "My hello";
+=======
+		cout << " hello";
+>>>>>>> b4d54ec7e2171dc730e900005244324ddacfa8ec
 		
 		
 		/*Player's dashboard:*/
