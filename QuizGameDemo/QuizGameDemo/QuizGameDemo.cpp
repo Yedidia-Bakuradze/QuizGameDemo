@@ -44,6 +44,7 @@ int main() {
 		cout << "My hello";
 		cout << " hello";
 		
+		cout << "My second";
 		
 		/*Player's dashboard:*/
 		
