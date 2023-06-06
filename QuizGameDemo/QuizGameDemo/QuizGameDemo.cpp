@@ -41,6 +41,7 @@ int main() {
 		/* login / Sign up form: */
 		isPlaying = false;
 		
+		cout << "My hello";
 		
 		
 		/*Player's dashboard:*/
