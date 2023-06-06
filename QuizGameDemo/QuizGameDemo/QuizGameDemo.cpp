@@ -43,7 +43,7 @@ int main() {
 		
 		cout << "My hello";
 		cout << " hello";
-		
+		cout << "Meir";
 		
 		/*Player's dashboard:*/
 		
