@@ -43,8 +43,12 @@ int main() {
 		
 		cout << "My hello";
 		cout << " hello";
+<<<<<<< HEAD
 		
 		cout << "My second";
+=======
+		cout << "Meir";
+>>>>>>> origin/main
 		
 		/*Player's dashboard:*/
 		
