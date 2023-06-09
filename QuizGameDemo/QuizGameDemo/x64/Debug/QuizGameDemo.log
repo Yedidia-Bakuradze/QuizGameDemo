@@ -1,2 +1,3 @@
 ﻿  QuizGameDemo.cpp
-  QuizGameDemo.vcxproj -> C:\Users\yedid\Documents\Programming\Apps and projects\Personal Projects\Quiz Game - Demo\QuizGameDemo\x64\Debug\QuizGameDemo.exe
+C:\Users\meirc\OneDrive\שולחן העבודה\ידידה דה פרו\QuizGameDemo\QuizGameDemo\QuizGameDemo\QuizGameDemo.cpp(38,11): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  QuizGameDemo.vcxproj -> C:\Users\meirc\OneDrive\שולחן העבודה\ידידה דה פרו\QuizGameDemo\QuizGameDemo\x64\Debug\QuizGameDemo.exe

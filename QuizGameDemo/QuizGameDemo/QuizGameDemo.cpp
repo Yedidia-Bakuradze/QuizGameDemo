@@ -7,7 +7,7 @@ struct player {
 	string firstName;
 	string lastName;
 	string username;
-	int password;
+	long password;
 	int socre;
 };
 
@@ -29,23 +29,94 @@ void modifyProfile(player user);
 player listOfPlayers[10] = {};
 enum dashBoradOptions {profile,runQuiz,createQuiz,logout};
 string row = "----------------------------------------------------\n";
+//check if the user is already in the system
+int userCheck(string user, player data[]) {
+	for (size_t i = 0; i < 10; i++)
+	{
+		if (user == data[i].username)
+		{
+			return i;
+		}
+	}
+	return 10;
+}
+//check if the password is correct
+int passwordCheck(int password, player data[], int index) {
+	if (password == data[index].password)
+	{
+		return 1;
+	}
+	return 10;
+}
 
-
+enum firstAsteps
+{
+	login,
+	signup,
+};
 int main() {
 	int playersIndexPosition = 0,choice;
 	bool isPlaying;
-	
+	string username;
+	long password;
+	bool loginend = true;
+	int numOfPlayers = 0;
+	int checkvar;//variable to use if we need to check things 
 	/* Main game loop: */
 	do {
 
 		/* login / Sign up form: */
+		cout << "Hi welcome to trevia world (:" << endl;
 		isPlaying = false;
+		while (loginend)
+		{
+			
+			cout << "press 0 to login" << endl;
+			cout << "prees 1 to signup" << endl;
+			cout << row;
+			cin >> choice;
+			switch (choice)
+			{
+			case login:
+				cout << "Enter your username:" << endl;
+				cin >> username;
+				playersIndexPosition = userCheck(username, listOfPlayers);
+				while (playersIndexPosition == 10)
+				{
+					cout << "cant found your username please try again" << endl;
+					cin >> username;
+					playersIndexPosition = userCheck(username, listOfPlayers);
+				}
+				
+				cout << "Hi " << listOfPlayers[playersIndexPosition].username << " please enter your password:" << endl;
+				cin >> password;
+				checkvar = passwordCheck(password, listOfPlayers, playersIndexPosition);
+				while (checkvar == 10)
+				{
+					cout << "the password not match the username please try again" << endl;
+					cin >> password;
+					checkvar = passwordCheck(password, listOfPlayers, playersIndexPosition);
+				}
+				loginend = false;
+				break;
+			case signup:
+				cout << "please enter your first name:" << endl;
+				cin >> listOfPlayers[numOfPlayers].firstName;
+				cout << "please enter your last name:" << endl;
+				cin >> listOfPlayers[numOfPlayers].lastName;
+				cout << "please enter username:" << endl;
+				cin >> listOfPlayers[numOfPlayers].username;
+				cout << "please enter a strong password:" << endl;
+				cout << "0-8 letters, no capital letters/numbers" << endl;
+				cin >> listOfPlayers[numOfPlayers].password;
+				numOfPlayers++;
+				break;
+			default:
+				break;
+			}
+		}
 		
-		cout << "My hello";
-		cout << " hello";
-		cout << "Meir";
-		cout << "My second";
-		cout << " mememem";
+		
 		/*Player's dashboard:*/
 		
 		//Welcome message:
@@ -53,8 +124,8 @@ int main() {
 		cout << row;
 		cout << "Hello " << currentPlayer.firstName << "" << endl;
 		cout << "Your current score: " << currentPlayer.socre << "." << endl;
-
-
+		
+		
 		//Main gateway:
 		do {
 			//Player's options:
