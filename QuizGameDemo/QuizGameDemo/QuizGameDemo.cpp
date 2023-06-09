@@ -14,13 +14,13 @@ struct player {
 /*Decalring functions : */
 
 //Shows the user "all" his personal information:
-void profileData(player user);
+void profileData(player &user);
 
 //Main function of profile modification:
-void mainProfile(player user);
+void mainProfile(player &user);
 
 //The modification function:
-void modifyProfile(player user);
+void modifyProfile(player& user);
 
 
 
@@ -138,7 +138,7 @@ int main() {
 		
 		
 		/*Player's dashboard:*/
-		
+
 		//Welcome message:
 		player currentPlayer = listOfPlayers[playersIndexPosition];
 		cout << row;
@@ -186,7 +186,7 @@ int main() {
 
 
 //Main function of profile modification:
-void mainProfile(player user) {
+void mainProfile(player& user) {
 	char choice;
 
 	cout << "Loading info ..." << endl;
@@ -218,11 +218,11 @@ void mainProfile(player user) {
 }
 
 //Shows the user "all" his personal information:
-void profileData(player user) {
+void profileData(player& user) {
 	//User's profile
 	cout << row;
 	cout << "This is " << user.firstName << "'s profile." << endl;
-	cout << "Full name: " << user.firstName << " " << user.lastName << '.' << endl;
+	cout << "Full name: " << user.firstName<< " " << user.lastName << '.' << endl;
 	cout << "Username: " << user.username << "." << endl;
 	cout << "Total score: " << user.socre << '.' << endl;
 	cout << row;
@@ -230,55 +230,57 @@ void profileData(player user) {
 
 
 //The modification function:
-void modifyProfile(player user) {
+void modifyProfile(player& user) {
 	/* TODO: add a enum dictionary for the user's options.*/
-	
+	enum OPTIONS {Firstname,Lastname,Password,Username,Exit};
 	int choice, newPassword;
 	string newUsername;
-	//Showing instructions:
-	cout << row;
-	cout << "Press 0 to change your first name." << endl;
-	cout << "Press 1 to change your last name." << endl;
-	cout << "Press 2 to change your password." << endl;
-	cout << "Press 3 to change your username." << endl;
-	cout << "Press 4 to exit the editing mode." << endl;
-	cout << row;
+	do {
+		//Showing instructions:
+		cout << row;
+		cout << "Press 0 to change your first name." << endl;
+		cout << "Press 1 to change your last name." << endl;
+		cout << "Press 2 to change your password." << endl;
+		cout << "Press 3 to change your username." << endl;
+		cout << "Press 4 to exit the editing mode." << endl;
+		cout << row;
 
 
-	//The gateway to the profile database:
-	cout << ">>>";
-	cin >> choice;
+		//The gateway to the profile database:
+		cout << ">>>";
+		cin >> choice;
 
-	switch (choice) {
-	case 0:
-		cout << "Enter your new first name: ";
-		cin >> user.firstName;
-		break;
-	case 1:
-		cout << "Enter your new last name: ";
-		cin >> user.lastName;
-		break;
-	case 2:
-		cout << "Enter your new password: ";
-		cin >> newPassword;
-		/* Check is the password is valid. */
-		user.password = newPassword;
-		break;
-	case 3:
-		cout << "Enter your new username: ";
-		cin >> newUsername;
-		/* Check is the username is valid. */
-		user.username = newUsername;
-		break;
+		switch (choice) {
+		case Firstname:
+			cout << "Enter your new first name: ";
+			cin >> user.firstName;
+			break;
+		case Lastname:
+			cout << "Enter your new last name: ";
+			cin >> user.lastName;
+			break;
+		case Password:
+			cout << "Enter your new password: ";
+			cin >> newPassword;
+			/* Check if the password is valid. */
+			user.password = newPassword;
+			break;
+		case Username:
+			cout << "Enter your new username: ";
+			cin >> newUsername;
+			/* Check if the username is valid. */
+			user.username = newUsername;
+			break;
 
-	case 4:
-		cout << "Saving changes ... " << endl;
-		break;
+		case Exit:
+			cout << "Saving changes ... " << endl;
+			break;
 
-	default:
-		cout << "Please choose a number between 0 to 3." << endl;
-		break;
-	}
+		default:
+			cout << "Please choose a number between 0 to 3." << endl;
+			break;
+		}
+	} while (choice != 4);
 
 
 }
