@@ -29,6 +29,16 @@ void modifyProfile(player user);
 player listOfPlayers[10] = {};
 enum dashBoradOptions {profile,runQuiz,createQuiz,logout};
 string row = "----------------------------------------------------\n";
+int userchecksu(string user, player data[]) {//the "su" in the end of the name means that is a function for "signup" system.
+	for (size_t i = 0; i < 10; i++)
+	{
+		if (user == data[i].username)
+		{
+			return 10;
+		}
+	}
+	
+}
 //check if the user is already in the system
 int userCheck(string user, player data[]) {
 	for (size_t i = 0; i < 10; i++)
@@ -81,11 +91,13 @@ int main() {
 				cout << "Enter your username:" << endl;
 				cin >> username;
 				playersIndexPosition = userCheck(username, listOfPlayers);
-				while (playersIndexPosition == 10)
+				checkvar = userCheck(username, listOfPlayers);
+				while (checkvar== 10)
 				{
 					cout << "cant found your username please try again" << endl;
 					cin >> username;
 					playersIndexPosition = userCheck(username, listOfPlayers);
+					checkvar = userCheck(username, listOfPlayers);
 				}
 				
 				cout << "Hi " << listOfPlayers[playersIndexPosition].username << " please enter your password:" << endl;
@@ -105,7 +117,15 @@ int main() {
 				cout << "please enter your last name:" << endl;
 				cin >> listOfPlayers[numOfPlayers].lastName;
 				cout << "please enter username:" << endl;
-				cin >> listOfPlayers[numOfPlayers].username;
+				cin >> username;
+				checkvar = userchecksu(username, listOfPlayers);
+				while (checkvar == 10)
+				{
+					cout << "This username is used by other player pls try diffrent user name" << endl;
+					cin >> username;
+					checkvar = userchecksu(username, listOfPlayers);
+				}
+				listOfPlayers[numOfPlayers].username = username;
 				cout << "please enter a strong password:" << endl;
 				cout << "0-8 letters, no capital letters/numbers" << endl;
 				cin >> listOfPlayers[numOfPlayers].password;
