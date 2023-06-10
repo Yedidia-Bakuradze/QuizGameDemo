@@ -77,7 +77,8 @@ int main() {
 
 		/* login / Sign up form: */
 		cout << "Hi welcome to trevia world (:" << endl;
-		isPlaying = false;
+		isPlaying = true;
+		loginend = true;
 		while (loginend)
 		{
 			
