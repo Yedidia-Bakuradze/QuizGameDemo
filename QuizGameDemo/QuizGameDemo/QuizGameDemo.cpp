@@ -1,5 +1,8 @@
 #include <iostream>
 #include <stdlib.h>
+#include <fstream>
+#include <string.h> 
+
 
 using namespace std;
 
@@ -78,19 +81,31 @@ int main() {
 	do {
 
 		/* login / Sign up form: */
-		cout << "Hi welcome to trevia world (:" << endl;
+		
+		cout << "_________________________________________________________________________\n\n";
+		cout << "                  welcome to the trevia world                               \n\n";
+		
+		
 		isPlaying = true;
 		loginend = true;
 		while (loginend)
 		{
-			
-			cout << "press 0 to login" << endl;
-			cout << "prees 1 to signup" << endl;
-			cout << row;
+			cout << "________________________________Menu_____________________________________\n\n";
+			cout << "\t\t|          press 0 to login               |" << endl;
+			cout << "\t\t|          prees 1 to signup              |" << endl;
+			cout << "\t\t|          prees 2 to exit                |\n" << endl;
+
+			cout << "please enter your choice:\n";
 			cin >> choice;
+			while (choice < 0 || choice>2)
+			{
+				cout << "please select from the options given above\n";
+				cin >> choice;
+			}
 			switch (choice)
 			{
 			case login:
+				
 				cout << "Enter your username:" << endl;
 				cin >> username;
 				playersIndexPosition = userCheck(username, listOfPlayers);
@@ -135,6 +150,9 @@ int main() {
 				numOfPlayers++;
 				break;
 			default:
+				cout << "\t\t\t  have a nice day :)" << endl;
+
+				return 0;
 				break;
 			}
 		}
