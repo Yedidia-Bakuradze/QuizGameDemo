@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -65,6 +66,7 @@ enum firstAsteps
 	signup,
 };
 int main() {
+	system("Color 0E");//change the color of the texet/background 
 	int playersIndexPosition = 0,choice;
 	bool isPlaying;
 	string username;
