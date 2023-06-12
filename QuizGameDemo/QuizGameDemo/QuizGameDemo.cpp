@@ -184,6 +184,7 @@ int main() {
 
 		//Welcome message:
 		player currentPlayer = listOfPlayers[playersIndexPosition];
+		system("cls");
 		cout << row;
 		cout << "Hello " << currentPlayer.firstName << "" << endl;
 		cout << "Your current score: " << currentPlayer.socre << "." << endl;
@@ -193,10 +194,10 @@ int main() {
 		do {
 			//Player's options:
 			cout << row;
-			cout << "Press 0 to see and modify your personal information." << endl;
-			cout << "Press 1 to run a quiz." << endl;
-			cout << "Press 2 to creare a quiz." << endl;
-			cout << "Press 3 to logout." << endl;
+			cout << "|Press 0 to see and modify your personal information.                   |" << endl;
+			cout << "|Press 1 to run a quiz.                                                 |" << endl;
+			cout << "|Press 2 to creare a quiz.                                              |" << endl;
+			cout << "|Press 3 to logout.                                                     |" << endl;
 			cout << row;
 			
 			cout << ">>>";
@@ -204,6 +205,7 @@ int main() {
 
 			switch (choice) {
 			case profile:
+				
 				mainProfile(currentPlayer);
 				break;
 			case runQuiz:
@@ -233,9 +235,9 @@ void forgot() {
 	int check1;
 	string username1;
 	system("cls");
-	cout << "\t\t\tforget your password ? no problem :)\n";
-	cout << "\t\t\tpress 1 to search your id by username" << endl;
-	cout << "\t\t\tpress 2 to go back to tha main menu" << endl;
+	cout << "\t\t\tForget your password ? no problem :)\n";
+	cout << "\t\t\tPress 1 to search your id by username" << endl;
+	cout << "\t\t\tPress 2 to go back to tha main menu" << endl;
 	cout << "Enter your choice:" ;
 	cin >> choice1;
 	cout << row << endl;
@@ -301,7 +303,7 @@ void forgot() {
 //Main function of profile modification:
 void mainProfile(player& user) {
 	char choice;
-
+	system("cls");
 	cout << "Loading info ..." << endl;
 	profileData(user);
 
