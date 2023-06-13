@@ -63,6 +63,7 @@ enum firstAsteps
 {
 	login,
 	signup,
+	quit,
 };
 int main() {
 	int playersIndexPosition = 0,choice;
@@ -81,13 +82,16 @@ int main() {
 		loginend = true;
 		while (loginend)
 		{
-			
-			cout << "press 0 to login" << endl;
-			cout << "prees 1 to signup" << endl;
 			cout << row;
+			cout << "Press 0 to login." << endl;
+			cout << "Prees 1 to signup." << endl;
+			cout << "Press 2 to exit the game." << endl;
+			cout << row;
+			
 			cin >> choice;
 			switch (choice)
 			{
+
 			case login:
 				cout << "Enter your username:" << endl;
 				cin >> username;
@@ -112,6 +116,7 @@ int main() {
 				}
 				loginend = false;
 				break;
+
 			case signup:
 				cout << "please enter your first name:" << endl;
 				cin >> listOfPlayers[numOfPlayers].firstName;
@@ -131,6 +136,11 @@ int main() {
 				cout << "0-8 letters, no capital letters/numbers" << endl;
 				cin >> listOfPlayers[numOfPlayers].password;
 				numOfPlayers++;
+				break;
+
+			case quit:
+				cout << "Have a nice day ..." << endl;
+				return 0;
 				break;
 			default:
 				break;
@@ -180,7 +190,6 @@ int main() {
 
 	} while (isPlaying);
 
-	cout << "Thank your for playing out program.";
 
 	return 0;
 }
