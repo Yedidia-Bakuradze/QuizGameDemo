@@ -7,13 +7,28 @@
 using namespace std;
 
 //The player's struct:
+/*
+struct question {
+	string author;
+	string question;
+	string falseAns1;
+	string falseAns2;
+	string falseAns3;
+	string trueAns;
+
+};
+*/
+
 struct player {
 	string firstName;
 	string lastName;
 	string username;
 	long password;
-	int socre;
+	int socre=0;
+	//question listOfQuestions[10];
+	int availableQuestions=0;
 };
+
 
 /*Decalring functions : */
 
@@ -28,12 +43,13 @@ void modifyProfile(player& user);
 //you can change your password if you forgot
 void forgot();
 
+//void createQuiz(string username, question questions[], int numOfQuestionsAvailable);
 
 
 
 //Local database:
 player listOfPlayers[10] = {};
-enum dashBoradOptions {profile,runQuiz,createQuiz,logout};
+enum dashBoradOptions {profile,run,create,logout};
 string row = "-------------------------------------------------------------------------\n";
 int userchecksu(string user, player data[]) {//the "su" in the end of the name means that is a function for "signup" system.
 	for (size_t i = 0; i < 10; i++)
@@ -70,6 +86,7 @@ enum firstAsteps
 	login,
 	signup,
 	changePassword,
+	quit,
 };
 //-------------------public variables------------------//
 int numOfPlayers = 0;
@@ -90,7 +107,7 @@ int main() {
 	/* Main game loop: */
 	do {
 
-		/* login / Sign up form: */
+		cout << "Hi, and welcome to trevia world (:" << endl;
 		
 		cout << "_________________________________________________________________________\n\n";
 		cout << "                        welcome to the trevia world                               \n\n";
@@ -98,29 +115,39 @@ int main() {
 		
 		isPlaying = true;
 		loginend = true;
+
 		while (loginend)
 		{
+												/* Main Window */
+			
 			cout << "___________________________________Menu__________________________________\n\n";
-			cout << "\t\t|          press 0 to login               |" << endl;
-			cout << "\t\t|          prees 1 to signup              |" << endl;
-			cout << "\t\t|          prees 2 to change password     |" << endl;
-			cout << "\t\t|          prees 3 to exit                |\n" << endl;
+			cout << "\t\t|          press 0 to login.               |" << endl;
+			cout << "\t\t|          prees 1 to signup.              |" << endl;
+			cout << "\t\t|          prees 2 to change password.     |" << endl;
+			cout << "\t\t|          prees 3 to exit.               |\n" << endl;
 
 			cout << "please enter your choice:\n";
 			cin >> choice;
-			while (choice < 0 || choice>2)
+			
+			//Checks if the number is valid:
+			while (choice < 0 || choice>3)
 			{
 				cout << "please select from the options given above\n";
 				cin >> choice;
 			}
+			
+			//Optional usage: 
 			switch (choice)
 			{
+
 			case login:
 				system("cls");
 				cout << "Enter your username:" << endl;
 				cin >> username;
+				
 				playersIndexPosition = userCheck(username, listOfPlayers);
 				checkvar = userCheck(username, listOfPlayers);
+				
 				while (checkvar== 10)
 				{
 					cout << "cant found your username please try again" << endl;
@@ -132,6 +159,7 @@ int main() {
 				cout << "Hi " << listOfPlayers[playersIndexPosition].username << " please enter your password:" << endl;
 				cin >> password;
 				checkvar = passwordCheck(password, listOfPlayers, playersIndexPosition);
+				
 				while (checkvar == 10)
 				{
 					cout << "the password not match the username please try again" << endl;
@@ -140,18 +168,24 @@ int main() {
 				}
 				loginend = false;
 				break;
+
 			case signup:
+				
 				system("cls");
 				cout << "please enter your first name:" << endl;
 				cin >> listOfPlayers[numOfPlayers].firstName;
+				
 				system("cls");
 				cout << "please enter your last name:" << endl;
 				cin >> listOfPlayers[numOfPlayers].lastName;
+				
 				system("cls");
 				cout << "please enter username:" << endl;
 				cin >> username;
 				checkvar = userchecksu(username, listOfPlayers);
+				
 				system("cls");
+				
 				while (checkvar == 10)
 				{
 					cout << "This username is used by other player pls try diffrent user name" << endl;
@@ -166,28 +200,30 @@ int main() {
 				numOfPlayers++;
 				system("cls");
 				break;
+
 			case changePassword:
 				forgot();
-				
-					break;
-			default:
+				break;
+
+			case quit:
 				system("cls");
 				cout << "\t\t\t  have a nice day :)" << endl;
-
 				return 0;
+			
+			default:
 				break;
 			}
 		}
 		
 		
-		/*Player's dashboard:*/
+												/*Player's dashboard:*/
 
 		//Welcome message:
-		player currentPlayer = listOfPlayers[playersIndexPosition];
+		player* currentPlayer = &listOfPlayers[playersIndexPosition];
 		system("cls");
 		cout << row;
-		cout << "Hello " << currentPlayer.firstName << "" << endl;
-		cout << "Your current score: " << currentPlayer.socre << "." << endl;
+		cout << "Hello " << (*(currentPlayer)).firstName << "" << endl;
+		cout << "Your current score: " << (*(currentPlayer)).socre << "." << endl;
 		
 		
 		//Main gateway:
@@ -206,11 +242,12 @@ int main() {
 			switch (choice) {
 			case profile:
 				
-				mainProfile(currentPlayer);
+				mainProfile((*(currentPlayer)));
 				break;
-			case runQuiz:
+			case run:
 				break;
-			case createQuiz:
+			case create:
+				//createQuiz(currentPlayer.username, currentPlayer.listOfQuestions, currentPlayer.availableQuestions);
 				break;
 			case logout:
 				break;
@@ -220,11 +257,10 @@ int main() {
 			}
 
 		} while (choice != logout);
-		cout << "Have a nice day " << currentPlayer.firstName << "." << endl;
+		cout << "Have a nice day " << (*(currentPlayer)).firstName << "." << endl;
 
 	} while (isPlaying);
 
-	cout << "Thank your for playing out program.";
 
 	return 0;
 }
@@ -343,7 +379,6 @@ void profileData(player& user) {
 	cout << row;
 }
 
-
 //The modification function:
 void modifyProfile(player& user) {
 	/* TODO: add a enum dictionary for the user's options.*/
@@ -399,3 +434,56 @@ void modifyProfile(player& user) {
 
 
 }
+
+/*
+void createQuiz(string username,question questions[],int numOfQuestionsAvailable) {
+	int numOfQuestions;
+	
+	//Getting number of questions:
+	do {
+		cout << "How many questions would you like to create?" << endl;
+		cout << ">>>";
+		cin >> numOfQuestions;
+
+		//Can't have more then 10 questions on his account:
+		if (numOfQuestions + numOfQuestionsAvailable > 10)
+			cout << "Sorry but you can't add more then " << 10 - numOfQuestionsAvailable <<" Questions to your profile. Please try again." << endl;
+
+	} while (numOfQuestions + numOfQuestionsAvailable > 10);
+	
+	//Setting up the questions:
+	for (int i = 0; i < numOfQuestions; i++) {
+		//Setting an easier variable:
+		question currentQuestion = questions[numOfQuestionsAvailable + i];
+		
+		//Getting info:
+		currentQuestion.author = username;
+		
+		//Adding the question title:
+		cout << "Enter your questions:" << endl;
+		cout << ">>>";
+		cin >> currentQuestion.question;
+
+		//Adding the false answers:
+		cout << "Enter the first false answer for that question:" << endl;
+		cout << ">>>";
+		cin >> currentQuestion.falseAns1;
+
+		cout << "Enter the second false answer for that question:" << endl;
+		cout << ">>>";
+		cin >> currentQuestion.falseAns2;
+
+		cout << "Enter the third false answer for that question:" << endl;
+		cout << ">>>";
+		cin >> currentQuestion.falseAns3;
+
+		//Adding the true answer.
+		cout << "Enter the correct answer for that question:" << endl;
+		cout << ">>>";
+		cin >> currentQuestion.trueAns;
+
+		cout << "Adding question to the system ..." << endl;
+	}
+}
+
+*/
