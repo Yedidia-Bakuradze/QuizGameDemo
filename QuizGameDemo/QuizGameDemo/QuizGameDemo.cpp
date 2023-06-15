@@ -7,7 +7,7 @@
 using namespace std;
 
 //The player's struct:
-/*
+
 struct question {
 	string author;
 	string question;
@@ -17,7 +17,7 @@ struct question {
 	string trueAns;
 
 };
-*/
+
 
 struct player {
 	string firstName;
@@ -25,7 +25,7 @@ struct player {
 	string username;
 	long password;
 	int socre=0;
-	//question listOfQuestions[10];
+	question listOfQuestions[10];
 	int availableQuestions=0;
 };
 
@@ -43,7 +43,6 @@ void modifyProfile(player& user);
 //you can change your password if you forgot
 void forgot();
 
-//void createQuiz(string username, question questions[], int numOfQuestionsAvailable);
 
 
 
@@ -247,7 +246,7 @@ int main() {
 			case run:
 				break;
 			case create:
-				//createQuiz(currentPlayer.username, currentPlayer.listOfQuestions, currentPlayer.availableQuestions);
+
 				break;
 			case logout:
 				break;
@@ -290,7 +289,7 @@ void forgot() {
 		{
 			cout << "cant find your username :(";
 			system("cls");
-			main();
+			return;
 		}
 		else
 		{
@@ -435,55 +434,3 @@ void modifyProfile(player& user) {
 
 }
 
-/*
-void createQuiz(string username,question questions[],int numOfQuestionsAvailable) {
-	int numOfQuestions;
-	
-	//Getting number of questions:
-	do {
-		cout << "How many questions would you like to create?" << endl;
-		cout << ">>>";
-		cin >> numOfQuestions;
-
-		//Can't have more then 10 questions on his account:
-		if (numOfQuestions + numOfQuestionsAvailable > 10)
-			cout << "Sorry but you can't add more then " << 10 - numOfQuestionsAvailable <<" Questions to your profile. Please try again." << endl;
-
-	} while (numOfQuestions + numOfQuestionsAvailable > 10);
-	
-	//Setting up the questions:
-	for (int i = 0; i < numOfQuestions; i++) {
-		//Setting an easier variable:
-		question currentQuestion = questions[numOfQuestionsAvailable + i];
-		
-		//Getting info:
-		currentQuestion.author = username;
-		
-		//Adding the question title:
-		cout << "Enter your questions:" << endl;
-		cout << ">>>";
-		cin >> currentQuestion.question;
-
-		//Adding the false answers:
-		cout << "Enter the first false answer for that question:" << endl;
-		cout << ">>>";
-		cin >> currentQuestion.falseAns1;
-
-		cout << "Enter the second false answer for that question:" << endl;
-		cout << ">>>";
-		cin >> currentQuestion.falseAns2;
-
-		cout << "Enter the third false answer for that question:" << endl;
-		cout << ">>>";
-		cin >> currentQuestion.falseAns3;
-
-		//Adding the true answer.
-		cout << "Enter the correct answer for that question:" << endl;
-		cout << ">>>";
-		cin >> currentQuestion.trueAns;
-
-		cout << "Adding question to the system ..." << endl;
-	}
-}
-
-*/
