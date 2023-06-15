@@ -2,12 +2,11 @@
 #include <stdlib.h>
 #include <fstream>
 #include <string.h> 
-
-
 using namespace std;
 
-//The player's struct:
 
+
+//The quiz's components:
 struct question {
 	string author;
 	string question;
@@ -18,7 +17,7 @@ struct question {
 
 };
 
-
+//The user's components:
 struct player {
 	string firstName;
 	string lastName;
@@ -40,8 +39,63 @@ void mainProfile(player &user);
 
 //The modification function:
 void modifyProfile(player& user);
-//you can change your password if you forgot
-void forgot();
+
+//Password checker:
+void passwordRecovery() {
+	char choiceC;
+	int choice1,indexPos,check1;
+	string username1;
+	system("cls");
+	
+	cout << "Please enter your username:" << endl;
+	cin >> username1;
+	system("cls");
+	check1 =  userCheck(username1, listOfPlayers);
+	indexPos = check1;
+	
+	//Checks if the username is in out system:
+	if (check1==10)
+	{
+		cout << "Sorry but the user that you are looking for - doesn't exists." << endl;
+		system("cls");
+		return;
+	}
+	//If the user exists:
+	else
+	{
+		cout << "Your account had been found." << endl;
+		cout << "Your password is: " << listOfPlayers[indexPos].password << endl;
+
+		
+		//Change the password:
+		do {
+			system("cls");
+			cout << "do you wont to change it or keep it like that ? (y/n) >>>";
+			cin >> choiceC;
+			system("cls");
+			
+			switch (choiceC)
+			{
+			case 'y':
+				cout << "pls choose a new password:";
+				cin >> listOfPlayers[indexPos].password;
+				system("cls");
+				cout << "\nYour password has been successfully changed.\n";
+				break;
+			case 'n':
+				cout << "Returning to the main window ...";
+				break;
+			default:
+				cout << "Please choose either 'y' or 'n'." << endl;
+				break;
+			}
+
+		} while (choiceC != 'n' && choiceC != 'y');
+		system("cls");
+		
+	}
+	
+}
 
 
 
@@ -87,18 +141,22 @@ enum firstAsteps
 	changePassword,
 	quit,
 };
+
 //-------------------public variables------------------//
 int numOfPlayers = 0;
 //-----------------------------------------------------//
 
 int main() {
-	system("Color 0E");//change the color of the texet/background 
+
+	//Text color: 
+	system("Color 0E");
+	
 	//-------------------local variables-------------------//
 	int playersIndexPosition = 0,choice;
 	bool isPlaying;
 	string username;
 	long password;
-	bool loginend = true;
+	bool userOnline = false;
 	int checkvar;//variable to use if we need to check things 
 	//-----------------------------------------------------//
 
@@ -113,9 +171,10 @@ int main() {
 		
 		
 		isPlaying = true;
-		loginend = true;
+		userOnline = false;
 
-		while (loginend)
+		//Main frame loop: (Login/Signup/Password reset/Exit).
+		while (!userOnline)
 		{
 												/* Main Window */
 			
@@ -128,16 +187,14 @@ int main() {
 			cout << "please enter your choice:\n";
 			cin >> choice;
 			
-			//Checks if the number is valid:
+			//Checks if the choice is valid:
 			while (choice < 0 || choice>3)
 			{
 				cout << "please select from the options given above\n";
 				cin >> choice;
 			}
 			
-			//Optional usage: 
-			switch (choice)
-			{
+			switch (choice){
 
 			case login:
 				system("cls");
@@ -145,44 +202,48 @@ int main() {
 				cin >> username;
 				
 				playersIndexPosition = userCheck(username, listOfPlayers);
-				checkvar = userCheck(username, listOfPlayers);
+				checkvar = playersIndexPosition;
 				
 				while (checkvar== 10)
 				{
 					cout << "cant found your username please try again" << endl;
 					cin >> username;
 					playersIndexPosition = userCheck(username, listOfPlayers);
-					checkvar = userCheck(username, listOfPlayers);
+					checkvar = playersIndexPosition;
 				}
 				
-				cout << "Hi " << listOfPlayers[playersIndexPosition].username << " please enter your password:" << endl;
-				cin >> password;
-				checkvar = passwordCheck(password, listOfPlayers, playersIndexPosition);
-				
-				while (checkvar == 10)
-				{
-					cout << "the password not match the username please try again" << endl;
+				//If the password fits the user.password component's value:
+				cout << "Hi, " << listOfPlayers[playersIndexPosition].username << " Please enter your password:" << endl;
+				do {
 					cin >> password;
 					checkvar = passwordCheck(password, listOfPlayers, playersIndexPosition);
-				}
-				loginend = false;
+					if(checkvar == 10)
+						cout << "the password not match the username please try again" << endl;
+				} while (checkvar == 10);
+				
+				//User is logged in:
+				userOnline = true;
 				break;
 
 			case signup:
 				
+				//Getting user's first name:
 				system("cls");
 				cout << "please enter your first name:" << endl;
 				cin >> listOfPlayers[numOfPlayers].firstName;
 				
+				//Getting user's last name:
 				system("cls");
 				cout << "please enter your last name:" << endl;
 				cin >> listOfPlayers[numOfPlayers].lastName;
 				
+				//Getting user's username:
 				system("cls");
 				cout << "please enter username:" << endl;
 				cin >> username;
+
+				//Checking if the username exists:
 				checkvar = userchecksu(username, listOfPlayers);
-				
 				system("cls");
 				
 				while (checkvar == 10)
@@ -192,21 +253,27 @@ int main() {
 					checkvar = userchecksu(username, listOfPlayers);
 					system("cls");
 				}
+
 				listOfPlayers[numOfPlayers].username = username;
+				
+				//Getting user's password:
 				cout << "please enter a strong password:" << endl;
 				cout << "0-8 letters, no capital letters/numbers" << endl;
 				cin >> listOfPlayers[numOfPlayers].password;
+				
+				//Adding another player to our database:
 				numOfPlayers++;
 				system("cls");
+				
 				break;
 
 			case changePassword:
-				forgot();
+				passwordRecovery();
 				break;
 
 			case quit:
 				system("cls");
-				cout << "\t\t\t  have a nice day :)" << endl;
+				cout << "\t\t\t Thank you for your time. Have a nice day :)" << endl;
 				return 0;
 			
 			default:
@@ -262,77 +329,6 @@ int main() {
 
 
 	return 0;
-}
-void forgot() {
-	char choiceC;//the capital 'c' in the end mean that is a char variable
-	int choice1;
-	int indexPos;
-	int check1;
-	string username1;
-	system("cls");
-	cout << "\t\t\tForget your password ? no problem :)\n";
-	cout << "\t\t\tPress 1 to search your id by username" << endl;
-	cout << "\t\t\tPress 2 to go back to tha main menu" << endl;
-	cout << "Enter your choice:" ;
-	cin >> choice1;
-	cout << row << endl;
-	system("cls");
-	switch (choice1)
-	{
-	case 1:
-		cout << "enter your username:" << endl;
-		cin >> username1;
-		system("cls");
-		check1 = userCheck(username1, listOfPlayers);
-		indexPos = userCheck(username1, listOfPlayers);
-		if (check1==10)
-		{
-			cout << "cant find your username :(";
-			system("cls");
-			return;
-		}
-		else
-		{
-			cout << "your account is found!" << endl;
-			cout << "your password is: " << listOfPlayers[indexPos].password << endl;
-			
-			
-			
-			do
-			{
-				
-				cout << "do you wont to change it or keep it like that ? (y/n) " << endl;
-				cin >> choiceC;
-				system("cls");
-				switch (choiceC)
-				{
-				case 'y':
-					cout << "pls choose a new password:";
-					cin >> listOfPlayers[indexPos].password;
-					system("cls");
-					cout << "\nYour password has been successfully changed.\n";
-					main();
-					break;
-				case 'n':
-					cout << "You'll return to the dashboard with no time.";
-					main();
-					break;
-				default:
-					cout << "Please choose y or n." << endl;
-					
-					break;
-				}
-				system("cls");
-			} while (choiceC != 'n');
-			
-		}
-		break;
-	case 2:
-		system("cls");
-		main();
-	default:
-		break;
-	}
 }
 
 //Main function of profile modification:
