@@ -9,11 +9,8 @@ using namespace std;
 //The quiz's components:
 struct question {
 	string author;
-	string question;
-	string falseAns1;
-	string falseAns2;
-	string falseAns3;
-	string trueAns;
+	char question[100];
+	char** answers = new char*[4];
 
 };
 
@@ -311,17 +308,22 @@ int main() {
 			cin >> choice;
 
 			switch (choice) {
+			
+			//Profile modification:
 			case profile:
-				
 				mainProfile((*(currentPlayer)));
 				break;
+			//Playing the quiz:
 			case run:
 				break;
+			//Creating a quiz:
 			case create:
 				quizCreate((*(currentPlayer)));
 				break;
+			//Logging out:
 			case logout:
 				break;
+			//None of the above:21+0-=00
 			default:
 				cout << "Please choose a number between 0 to 3" << endl;
 				break;
@@ -437,10 +439,11 @@ void modifyProfile(player& user) {
 
 //Quiz create function:
 void quizCreate(player& user) {
-
 	int numOfQuestions;
-	string header;
+
 	cout << "How many questions would you like to add?" << endl;
+	
+	//Getting the question's amount:
 	do {
 
 		cout << ">>>";
@@ -450,31 +453,44 @@ void quizCreate(player& user) {
 
 	} while (10 - (user.availableQuestions + numOfQuestions) < 0);
 	
-	for (int i = 0; i < numOfQuestions; i++) {
+	
+	//Setting the questions:
+	for (int i = 0,k=0; i < numOfQuestions; i++,k=0) {
+		question* currentQuestion = &user.listOfQuestions[user.availableQuestions + i];
+		
+		//Initionlizing the answer's strings variables in the array:
+		for (int i = 0; i < 4; i++) {
+			(*(currentQuestion)).answers[i] = new char[100];
+		}
+
+		//Writing the author's username as a refrence to that question:
 		cout << "Initionlizing question number " << i + 1 << "/"<<numOfQuestions<<"." << endl;
-		user.listOfQuestions[user.availableQuestions +i].author = user.username;
+		(*(currentQuestion)).author = user.username;
 		
 		//Filling the question's field:
 		cout << "Please enter the question: (Max 49 letters)" << endl;
-		cin >> header;
-		user.listOfQuestions[user.availableQuestions + i].question = header;
+		cin.ignore();
+		cin.getline((*(currentQuestion)).question, 99);
 		
 		//Filling the question's field:
 		cout << "Please enter the first false answer for that question:" << endl;
-		cin >> user.listOfQuestions[user.availableQuestions + i].falseAns1;
+		cin.getline((*(currentQuestion)).answers[k++], 99);
 		
 		//Filling the question's field:
 		cout << "Please enter the second false answer for that question:" << endl;
-		cin >> user.listOfQuestions[user.availableQuestions + i].falseAns2;
+		cin.getline((*(currentQuestion)).answers[k++], 99);
 		
 		//Filling the question's field:
 		cout << "Please enter the third false answer for that question:" << endl;
-		cin >> user.listOfQuestions[user.availableQuestions + i].falseAns3;
+		cin.getline((*(currentQuestion)).answers[k++], 99);
 
 		//Filling the only true answer:
 		cout << "Please enter the true answer for that question:" << endl;
-		cin >> user.listOfQuestions[user.availableQuestions + i].trueAns;
+		cin.getline((*(currentQuestion)).answers[k++], 99);
 
-		cout << "Saving the question" << endl;
+		//Finishing:
+		cout << "Saving the question ..." << endl;
 	}
+	
+	user.availableQuestions += numOfQuestions;
 }
