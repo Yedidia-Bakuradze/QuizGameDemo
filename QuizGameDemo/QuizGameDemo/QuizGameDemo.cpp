@@ -31,6 +31,9 @@ struct player {
 
 /*Decalring functions : */
 
+//Checks if the user is already in the database
+int userCheck(string user, player data[]);
+
 //Shows the user "all" his personal information:
 void profileData(player &user);
 
@@ -39,6 +42,11 @@ void mainProfile(player &user);
 
 //The modification function:
 void modifyProfile(player& user);
+
+//Local database:
+player listOfPlayers[10] = {};
+enum dashBoradOptions { profile, run, create, logout };
+string row = "-------------------------------------------------------------------------\n";
 
 //Password checker:
 void passwordRecovery() {
@@ -57,9 +65,10 @@ void passwordRecovery() {
 	if (check1==10)
 	{
 		cout << "Sorry but the user that you are looking for - doesn't exists." << endl;
-		system("cls");
+		
 		return;
 	}
+	
 	//If the user exists:
 	else
 	{
@@ -97,13 +106,6 @@ void passwordRecovery() {
 	
 }
 
-
-
-
-//Local database:
-player listOfPlayers[10] = {};
-enum dashBoradOptions {profile,run,create,logout};
-string row = "-------------------------------------------------------------------------\n";
 int userchecksu(string user, player data[]) {//the "su" in the end of the name means that is a function for "signup" system.
 	for (size_t i = 0; i < 10; i++)
 	{
@@ -164,10 +166,10 @@ int main() {
 	/* Main game loop: */
 	do {
 
-		cout << "Hi, and welcome to trevia world (:" << endl;
+		
 		
 		cout << "_________________________________________________________________________\n\n";
-		cout << "                        welcome to the trevia world                               \n\n";
+		cout << "                     Hi, and welcome to trevia world (:                    \n\n";
 		
 		
 		isPlaying = true;
@@ -182,7 +184,7 @@ int main() {
 			cout << "\t\t|          press 0 to login.               |" << endl;
 			cout << "\t\t|          prees 1 to signup.              |" << endl;
 			cout << "\t\t|          prees 2 to change password.     |" << endl;
-			cout << "\t\t|          prees 3 to exit.               |\n" << endl;
+			cout << "\t\t|          prees 3 to exit.                |\n" << endl;
 
 			cout << "please enter your choice:\n";
 			cin >> choice;

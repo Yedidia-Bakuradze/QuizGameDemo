@@ -1,4 +1,5 @@
 ﻿  QuizGameDemo.cpp
-C:\Users\yedid\Documents\Programming\Apps and projects\Personal Projects\Quiz Game - Demo\QuizGameDemo\QuizGameDemo\QuizGameDemo.cpp(69,11): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\yedid\Documents\Programming\Apps and projects\Personal Projects\Quiz Game - Demo\QuizGameDemo\QuizGameDemo\QuizGameDemo.cpp(62): warning C4715: 'userchecksu': not all control paths return a value
-  QuizGameDemo.vcxproj -> C:\Users\yedid\Documents\Programming\Apps and projects\Personal Projects\Quiz Game - Demo\QuizGameDemo\x64\Debug\QuizGameDemo.exe
+C:\Users\meirc\OneDrive\שולחן העבודה\ידידה דה פרו\QuizGameDemo\QuizGameDemo\QuizGameDemo\QuizGameDemo.cpp(54,6): warning C4101: 'choice1': unreferenced local variable
+C:\Users\meirc\OneDrive\שולחן העבודה\ידידה דה פרו\QuizGameDemo\QuizGameDemo\QuizGameDemo\QuizGameDemo.cpp(125,11): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\meirc\OneDrive\שולחן העבודה\ידידה דה פרו\QuizGameDemo\QuizGameDemo\QuizGameDemo\QuizGameDemo.cpp(118): warning C4715: 'userchecksu': not all control paths return a value
+  QuizGameDemo.vcxproj -> C:\Users\meirc\OneDrive\שולחן העבודה\ידידה דה פרו\QuizGameDemo\QuizGameDemo\x64\Debug\QuizGameDemo.exe
