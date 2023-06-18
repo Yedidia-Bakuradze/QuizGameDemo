@@ -9,11 +9,8 @@ using namespace std;
 //The quiz's components:
 struct question {
 	string author;
-	string question;
-	string falseAns1;
-	string falseAns2;
-	string falseAns3;
-	string trueAns;
+	char question[100];
+	char** answers = new char*[4];
 
 };
 
@@ -43,15 +40,32 @@ void mainProfile(player &user);
 //The modification function:
 void modifyProfile(player& user);
 
+
 //Local database:
 player listOfPlayers[10] = {};
 enum dashBoradOptions { profile, run, create, logout };
-string row = "-------------------------------------------------------------------------\n";
+
+
+//Check if the user is already in the system
+int userCheck(string user, player data[]) {
+	for (int i = 0; i < 10; i++)
+	{
+		if (user == data[i].username)
+		{
+			return i;
+		}
+	}
+	return 10;
+}
+
+//Global database:
+
+
 
 //Password checker:
 void passwordRecovery() {
 	char choiceC;
-	int choice1,indexPos,check1;
+	int choice1 = 0, indexPos, check1;
 	string username1;
 	system("cls");
 	
@@ -86,7 +100,7 @@ void passwordRecovery() {
 			switch (choiceC)
 			{
 			case 'y':
-				cout << "pls choose a new password:";
+				cout << "Please choose a new password:";
 				cin >> listOfPlayers[indexPos].password;
 				system("cls");
 				cout << "\nYour password has been successfully changed.\n";
@@ -106,6 +120,15 @@ void passwordRecovery() {
 	
 }
 
+
+//Create a quiz:
+void quizCreate(player& user);
+
+
+
+
+string row = "-------------------------------------------------------------------------\n";
+
 int userchecksu(string user, player data[]) {//the "su" in the end of the name means that is a function for "signup" system.
 	for (size_t i = 0; i < 10; i++)
 	{
@@ -116,18 +139,8 @@ int userchecksu(string user, player data[]) {//the "su" in the end of the name m
 	}
 	
 }
-//check if the user is already in the system
-int userCheck(string user, player data[]) {
-	for (size_t i = 0; i < 10; i++)
-	{
-		if (user == data[i].username)
-		{
-			return i;
-		}
-	}
-	return 10;
-}
-//check if the password is correct
+
+//Check if the password is correct
 int passwordCheck(int password, player data[], int index) {
 	if (password == data[index].password)
 	{
@@ -308,17 +321,22 @@ int main() {
 			cin >> choice;
 
 			switch (choice) {
+			
+			//Profile modification:
 			case profile:
-				
 				mainProfile((*(currentPlayer)));
 				break;
+			//Playing the quiz:
 			case run:
 				break;
+			//Creating a quiz:
 			case create:
-
+				quizCreate((*(currentPlayer)));
 				break;
+			//Logging out:
 			case logout:
 				break;
+			//None of the above:21+0-=00
 			default:
 				cout << "Please choose a number between 0 to 3" << endl;
 				break;
@@ -432,3 +450,60 @@ void modifyProfile(player& user) {
 
 }
 
+//Quiz create function:
+void quizCreate(player& user) {
+	int numOfQuestions;
+
+	cout << "How many questions would you like to add?" << endl;
+	
+	//Getting the question's amount:
+	do {
+
+		cout << ">>>";
+		cin >> numOfQuestions;
+		if (10 - (user.availableQuestions + numOfQuestions) < 0)
+			cout << "Sorry but you can't add more then " << 10 - user.availableQuestions << " questions." << endl;
+
+	} while (10 - (user.availableQuestions + numOfQuestions) < 0);
+	
+	
+	//Setting the questions:
+	for (int i = 0,k=0; i < numOfQuestions; i++,k=0) {
+		question* currentQuestion = &user.listOfQuestions[user.availableQuestions + i];
+		
+		//Initionlizing the answer's strings variables in the array:
+		for (int i = 0; i < 4; i++) {
+			(*(currentQuestion)).answers[i] = new char[100];
+		}
+
+		//Writing the author's username as a refrence to that question:
+		cout << "Initionlizing question number " << i + 1 << "/"<<numOfQuestions<<"." << endl;
+		(*(currentQuestion)).author = user.username;
+		
+		//Filling the question's field:
+		cout << "Please enter the question: (Max 49 letters)" << endl;
+		cin.ignore();
+		cin.getline((*(currentQuestion)).question, 99);
+		
+		//Filling the question's field:
+		cout << "Please enter the first false answer for that question:" << endl;
+		cin.getline((*(currentQuestion)).answers[k++], 99);
+		
+		//Filling the question's field:
+		cout << "Please enter the second false answer for that question:" << endl;
+		cin.getline((*(currentQuestion)).answers[k++], 99);
+		
+		//Filling the question's field:
+		cout << "Please enter the third false answer for that question:" << endl;
+		cin.getline((*(currentQuestion)).answers[k++], 99);
+
+		//Filling the only true answer:
+		cout << "Please enter the true answer for that question:" << endl;
+		cin.getline((*(currentQuestion)).answers[k++], 99);
+
+		//Finishing:
+		cout << "Saving the question ..." << endl;
+	}
+	
+	user.availableQuestions += numOfQuestions;
+}
