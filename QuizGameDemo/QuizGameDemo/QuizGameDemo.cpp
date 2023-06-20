@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <fstream>
 #include <string.h> 
+#define _CRT_SECURE_NO_WARNINGS
+#pragma warning(disable: 4996)
 using namespace std;
 
 
@@ -25,6 +27,8 @@ struct player {
 	int availableQuestions=0;
 };
 
+//Global database:
+player listOfPlayers[10] = {};
 
 /*Decalring functions : */
 
@@ -49,13 +53,13 @@ int userCheck(string user, player data[]) {
 	return 10;
 }
 
-//Global database:
-player listOfPlayers[10] = {};
+//Quiz play system:
+void quizPlay(player& user);
 
 //Password checker:
 void passwordRecovery() {
 	char choiceC;
-	int choice1,indexPos,check1;
+	int choice1=0,indexPos,check1;
 	string username1;
 	system("cls");
 	
@@ -112,18 +116,26 @@ void passwordRecovery() {
 //Create a quiz:
 void quizCreate(player& user);
 
+//The main heart of the play system:
+void quizActive(player& user, int adminIndexPosition);
+
+//Checks if the given index position is already been choosed:
+bool indexChecker(int* indexes, int index, int size);
 
 
 enum dashBoradOptions {profile,run,create,logout};
 string row = "-------------------------------------------------------------------------\n";
-int userchecksu(string user, player data[]) {//the "su" in the end of the name means that is a function for "signup" system.
-	for (size_t i = 0; i < 10; i++)
+
+//The "su" in the end of the name means that is a function for "signup" system.
+int userchecksu(string user, player data[]) {
+	for (int i = 0; i < 10; i++)
 	{
 		if (user == data[i].username)
 		{
 			return 10;
 		}
 	}
+	return NULL;
 	
 }
 
@@ -315,6 +327,7 @@ int main() {
 				break;
 			//Playing the quiz:
 			case run:
+				quizPlay((*(currentPlayer)));
 				break;
 			//Creating a quiz:
 			case create:
@@ -486,11 +499,143 @@ void quizCreate(player& user) {
 
 		//Filling the only true answer:
 		cout << "Please enter the true answer for that question:" << endl;
-		cin.getline((*(currentQuestion)).answers[k++], 99);
+		cin.getline((*(currentQuestion)).answers[k], 99);
 
 		//Finishing:
 		cout << "Saving the question ..." << endl;
 	}
 	
 	user.availableQuestions += numOfQuestions;
+}
+
+void quizPlay(player& user) {
+	srand((unsigned int)time(NULL));
+	enum quizPlayOptions {byRandom,byUser,exit};
+	bool playing = true,invalidChoice =false;
+	int choice,sourcePlayerIndexPosition;
+	
+
+	//Getting user's choice:
+	do {
+		
+		//Instructions to the user:
+		cout << "How would you like to choose your quiz?" << endl;
+		cout << "Press 0 if you want to get a random quiz." << endl;
+		cout << "Press 1 if you want to choose a specific user's quiz." << endl;
+		cout << "Press 2 if you want to get back to the dashboard." << endl;
+		cout << ">>>";
+		cin >> choice;
+
+		invalidChoice = false;
+		switch (choice) {
+		case byRandom:
+			//Getting random index position:
+			for (sourcePlayerIndexPosition = rand() % numOfPlayers; listOfPlayers[sourcePlayerIndexPosition].username == user.username && listOfPlayers[sourcePlayerIndexPosition].availableQuestions <= 0; sourcePlayerIndexPosition = rand() % numOfPlayers);
+			quizActive(user,sourcePlayerIndexPosition);
+			break;
+		case byUser:
+			break;
+		case exit:
+			return;
+		default:
+			cout << "Please choose either 0 or 1." << endl;
+			invalidChoice = true;
+				
+		}
+	} while (invalidChoice);
+
+
+
+}
+
+//The main heart of the play system:
+void quizActive(player& user, int adminIndexPosition) {
+	const int numOfAnswers = 4;
+	srand((unsigned int)time(NULL));
+	int indexes[numOfAnswers]{}, randomIndex, choice;
+
+	//The source player:
+	player* adminPlayer = &listOfPlayers[adminIndexPosition];
+	
+	//The question generator:
+	for (int rounds = 0; rounds < (*(adminPlayer)).availableQuestions; rounds++) {
+		//Setting the temp array for the answers:
+		char** answers = new char* [numOfAnswers];
+		
+		//Initionlizing the array:
+		for (int i = 0; i < numOfAnswers; i++) {
+			answers[i] = new char[100];
+		}
+
+		//Resetting index's array:
+		for (int* ptr = indexes; ptr < indexes + numOfAnswers; ptr++)
+			*ptr = 0;
+
+		//Setting current question's variable:
+		question* currentQuestion = &(*(adminPlayer)).listOfQuestions[rounds];
+		
+		//Getting random and valid position:
+		for (int j = 0; j < numOfAnswers; j++) {
+			
+			do {
+				randomIndex = rand() % 4 ;
+			} while (indexChecker(indexes, randomIndex,j));
+			
+			//Copying the answers to the temp array of answers:
+			strcpy(answers[j], (*(currentQuestion)).answers[randomIndex]);
+			indexes[j] = randomIndex;
+
+		}
+
+		//Starting to play:
+		
+		//Presenting the question:
+		cout << "Question " << rounds + 1 << "/" << (*(adminPlayer)).availableQuestions << " - "<< (*(currentQuestion)).question<<endl;
+		
+		//Showing the optional answers:
+		cout << "Available answers:" << endl;
+		for (int i = 0; i < numOfAnswers; i++) {
+			cout << i << " - "<<answers[i] << endl;
+		}
+
+		//Getting user's answer:
+		cout << "Whats your answer?" << endl;
+		do {
+			cout << ">>>";
+			cin >> choice;
+			if (!indexChecker(indexes, randomIndex,4)) {
+				cout << "Please choose a number between 0 to 3" << endl;
+			}
+
+		} while (!indexChecker(indexes, randomIndex,4));
+
+		//Checking the given answer.Displaying victory / lost message:
+		if (!strcmp(answers[choice], (*(adminPlayer)).listOfQuestions->answers[numOfAnswers - 1])) {
+			cout << "Well done, you just earnd one point." << endl;
+			user.socre++;
+		}
+		else
+			cout << "Sorry, but the answer was: " << (*(adminPlayer)).listOfQuestions->answers[numOfAnswers - 1] << " unlike your answer which was: " << answers[choice] << "." << endl;
+
+		//Deleting the pointers:
+		for (int i = 0; i < numOfAnswers; i++) {
+			delete[] answers[i];
+		}
+
+		//Deleting pointers:
+		delete [] answers;
+	}
+
+	cout << "Well done you finished the quiz." << endl;
+	cout << "Returning to the dashboard ..." << endl;
+	
+}
+
+//Checks if the given index position is already been choosed:
+bool indexChecker(int* indexes,int index,int size){
+	for (int* ptr = indexes;ptr<indexes+size; ptr++) {
+		if (*ptr == index)
+			return true;
+	}
+	return false;
 }
