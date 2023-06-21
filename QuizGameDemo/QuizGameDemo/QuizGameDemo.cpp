@@ -482,23 +482,28 @@ void quizCreate(player& user) {
 		
 		//Filling the question's field:
 		cout << "Please enter the question: (Max 49 letters)" << endl;
+		cout << ">>>";
 		cin.ignore();
 		cin.getline((*(currentQuestion)).question, 99);
 		
 		//Filling the question's field:
 		cout << "Please enter the first false answer for that question:" << endl;
+		cout << ">>>";
 		cin.getline((*(currentQuestion)).answers[k++], 99);
 		
 		//Filling the question's field:
 		cout << "Please enter the second false answer for that question:" << endl;
+		cout << ">>>";
 		cin.getline((*(currentQuestion)).answers[k++], 99);
 		
 		//Filling the question's field:
 		cout << "Please enter the third false answer for that question:" << endl;
+		cout << ">>>";
 		cin.getline((*(currentQuestion)).answers[k++], 99);
 
 		//Filling the only true answer:
 		cout << "Please enter the true answer for that question:" << endl;
+		cout << ">>>";
 		cin.getline((*(currentQuestion)).answers[k], 99);
 
 		//Finishing:
@@ -513,7 +518,8 @@ void quizPlay(player& user) {
 	enum quizPlayOptions {byRandom,byUser,exit};
 	bool playing = true,invalidChoice =false;
 	int choice,sourcePlayerIndexPosition;
-	
+	int quizSize = 0;
+	int* indexes;
 
 	//Getting user's choice:
 	do {
@@ -529,14 +535,44 @@ void quizPlay(player& user) {
 		invalidChoice = false;
 		switch (choice) {
 		case byRandom:
+			
 			//Getting random index position:
 			for (sourcePlayerIndexPosition = rand() % numOfPlayers; listOfPlayers[sourcePlayerIndexPosition].username == user.username && listOfPlayers[sourcePlayerIndexPosition].availableQuestions <= 0; sourcePlayerIndexPosition = rand() % numOfPlayers);
+			
+			//Calling quiz fucntion:
 			quizActive(user,sourcePlayerIndexPosition);
 			break;
 		case byUser:
+
+			//Show list of users that have quizes available:
+			indexes = new int[numOfPlayers];
+			for (int i = 0; i < numOfPlayers; i++) {
+				if (listOfPlayers[i].availableQuestions > 0 && listOfPlayers[i].username != user.username) {
+					cout << "Player number " << i << " - " << listOfPlayers[i].username << " | " << listOfPlayers[i].availableQuestions << " questions available." << endl;
+					indexes[quizSize++] = i;
+				}
+			}
+
+			//Choice check:
+			bool isValid;
+			do {
+				//User's choice:
+				cout << "Please enter the player number that you want him to be your quiz source:" << endl;
+				cout << ">>> ";
+				cin >> sourcePlayerIndexPosition;
+				isValid = indexChecker(indexes, sourcePlayerIndexPosition, quizSize);
+				if (!isValid)
+					cout << "Sorry but this user doesn't exists." << endl;
+			} while (!isValid);
+			
+			//Deleting temp array:
+			delete[] indexes;
+
+			//Calling quiz fucntion:
+			quizActive(user, sourcePlayerIndexPosition);
 			break;
 		case exit:
-			return;
+			break;
 		default:
 			cout << "Please choose either 0 or 1." << endl;
 			invalidChoice = true;
@@ -550,13 +586,14 @@ void quizPlay(player& user) {
 
 //The main heart of the play system:
 void quizActive(player& user, int adminIndexPosition) {
-	const int numOfAnswers = 4;
 	srand((unsigned int)time(NULL));
+	const int numOfAnswers = 4;
 	int indexes[numOfAnswers]{}, randomIndex, choice;
 
 	//The source player:
 	player* adminPlayer = &listOfPlayers[adminIndexPosition];
 	
+	cout << "This quiz is made by " << (*(adminPlayer)).username << ". Enjoy." << endl;
 	//The question generator:
 	for (int rounds = 0; rounds < (*(adminPlayer)).availableQuestions; rounds++) {
 		//Setting the temp array for the answers:
@@ -564,7 +601,7 @@ void quizActive(player& user, int adminIndexPosition) {
 		
 		//Initionlizing the array:
 		for (int i = 0; i < numOfAnswers; i++) {
-			answers[i] = new char[100];
+			answers[i] = new char[100] {};
 		}
 
 		//Resetting index's array:
@@ -587,7 +624,7 @@ void quizActive(player& user, int adminIndexPosition) {
 
 		}
 
-		//Starting to play:
+									/* Starting to play :*/
 		
 		//Presenting the question:
 		cout << "Question " << rounds + 1 << "/" << (*(adminPlayer)).availableQuestions << " - "<< (*(currentQuestion)).question<<endl;
@@ -610,7 +647,7 @@ void quizActive(player& user, int adminIndexPosition) {
 		} while (!indexChecker(indexes, randomIndex,4));
 
 		//Checking the given answer.Displaying victory / lost message:
-		if (!strcmp(answers[choice], (*(adminPlayer)).listOfQuestions->answers[numOfAnswers - 1])) {
+		if (!strcmp(answers[choice], (*(currentQuestion)).answers[numOfAnswers-1])) {
 			cout << "Well done, you just earnd one point." << endl;
 			user.socre++;
 		}
