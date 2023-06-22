@@ -189,6 +189,7 @@ int main() {
 	string username;
 	long password;
 	bool userOnline = false;
+	char saftyAnswer[100];
 	int checkvar;//variable to use if we need to check things 
 	//-----------------------------------------------------//
 
@@ -264,18 +265,27 @@ int main() {
 							cout << "The password doesn't match pls try again:\n";
 
 					} while (checkvar == 10);
+					//User is logged in:
+					userOnline = (checkvar != 10) ?true:false;
 					system("cls");
 					break;
 				case 2:
-					passwordRecovery();
+					cout << "In order to continue please answer the following safety question:" << endl;
+					cout << listOfPlayers[playersIndexPosition].safetyQuestion << endl;
+					cout << ">>> ";
+					cin.ignore();
+					cin.getline(saftyAnswer, 99);
+					if (!stricmp(saftyAnswer, listOfPlayers[playersIndexPosition].safetyAnswer))
+						passwordRecovery();
+					else
+						cout << "Sorry but the answer isn't right." << endl;
 					break;
 				default:
 					
 					break;
 				}
+				system("cls");
 				
-				//User is logged in:
-				userOnline = true;
 				break;
 
 			case signup:
