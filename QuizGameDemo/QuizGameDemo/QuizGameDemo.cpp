@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <fstream>
 #include <string.h> 
-#include <windows.h>
+#include <Windows.h>
 #define _CRT_SECURE_NO_WARNINGS
 #pragma warning(disable: 4996)
 using namespace std;
@@ -22,9 +22,9 @@ struct player {
 	string firstName;
 	string lastName;
 	string username;
-	long password;
 	char safetyQuestion[100];
 	char safetyAnswer[100];
+	long password;
 	int socre=0;
 	question listOfQuestions[10];
 	int availableQuestions=0;
@@ -56,13 +56,23 @@ int userCheck(string user, player data[]) {
 	return 10;
 }
 
+
+//Global database:
+
+
+
 //Quiz play system:
 void quizPlay(player& user);
+
 
 //Password checker:
 void passwordRecovery() {
 	char choiceC;
-	int choice1=0,indexPos,check1;
+
+	int choice1 = 0, indexPos, check1;
+
+
+
 	string username1;
 	system("cls");
 	
@@ -76,9 +86,10 @@ void passwordRecovery() {
 	if (check1==10)
 	{
 		cout << "Sorry but the user that you are looking for - doesn't exists." << endl;
-		system("cls");
+		
 		return;
 	}
+	
 	//If the user exists:
 	else
 	{
@@ -116,6 +127,7 @@ void passwordRecovery() {
 	
 }
 
+
 //Create a quiz:
 void quizCreate(player& user);
 
@@ -126,8 +138,11 @@ void quizActive(player& user, int adminIndexPosition);
 bool indexChecker(int* indexes, int index, int size);
 
 
-enum dashBoradOptions {profile,run,create,logout};
+
 string row = "-------------------------------------------------------------------------\n";
+
+
+	
 
 //The "su" in the end of the name means that is a function for "signup" system.
 int userchecksu(string user, player data[]) {
@@ -181,15 +196,16 @@ int main() {
 	/* Main game loop: */
 	do {
 
-		cout << "Hi, and welcome to trevia world (:" << endl;
+		
 		
 		cout << "_________________________________________________________________________\n\n";
-		cout << "                        welcome to the trevia world                               \n\n";
+		cout << "                     Hi, and welcome to trevia world (:                    \n\n";
 		
 		
 		isPlaying = true;
 		userOnline = false;
-
+		Sleep(300);
+		system("cls");
 		//Main frame loop: (Login/Signup/Password reset/Exit).
 		while (!userOnline)
 		{
@@ -198,9 +214,8 @@ int main() {
 			cout << "___________________________________Menu__________________________________\n\n";
 			cout << "\t\t|          press 0 to login.               |" << endl;
 			cout << "\t\t|          prees 1 to signup.              |" << endl;
-			cout << "\t\t|          prees 2 to change password.     |" << endl;
-			cout << "\t\t|          prees 3 to exit.               |\n" << endl;
-
+			cout << "\t\t|          prees 2 to exit.                |\n" << endl;
+			Sleep(4);
 			cout << "please enter your choice:\n";
 			cin >> choice;
 			
@@ -231,12 +246,33 @@ int main() {
 				
 				//If the password fits the user.password component's value:
 				cout << "Hi, " << listOfPlayers[playersIndexPosition].username << " Please enter your password:" << endl;
-				do {
-					cin >> password;
-					checkvar = passwordCheck(password, listOfPlayers, playersIndexPosition);
-					if(checkvar == 10)
-						cout << "the password not match the username please try again" << endl;
-				} while (checkvar == 10);
+				cin >> password;
+				checkvar = passwordCheck(password, listOfPlayers, playersIndexPosition);
+				if (checkvar == 10) {
+					cout << "The password not match.\nPress 1 to try again:\nPress 2 to change your password:\nPress 3 to back to the main menu" << endl;
+					cin >> choice;
+				}
+				system("cls");
+				switch (choice)
+				{
+				case 1:
+					do {
+						cout << "Enter your password:\n";
+						cin >> password;
+						checkvar = passwordCheck(password, listOfPlayers, playersIndexPosition);
+						if (checkvar == 10)
+							cout << "The password doesn't match pls try again:\n";
+
+					} while (checkvar == 10);
+					system("cls");
+					break;
+				case 2:
+					passwordRecovery();
+					break;
+				default:
+					
+					break;
+				}
 				
 				//User is logged in:
 				userOnline = true;
@@ -275,7 +311,7 @@ int main() {
 				
 				//Getting user's password:
 				cout << "please enter a strong password:" << endl;
-				cout << "0-8 letters, no capital letters/numbers" << endl;
+				cout << "0-8 digits, only numbers." << endl;
 				cin >> listOfPlayers[numOfPlayers].password;
 				
 				//Adding safety question:
@@ -294,10 +330,6 @@ int main() {
 				numOfPlayers++;
 				system("cls");
 				
-				break;
-
-			case changePassword:
-				passwordRecovery();
 				break;
 
 			case quit:
@@ -320,7 +352,7 @@ int main() {
 		cout << "Hello " << (*(currentPlayer)).firstName << "" << endl;
 		cout << "Your current score: " << (*(currentPlayer)).socre << "." << endl;
 		
-		
+		enum OPTIONS {profile,run,create,logout};
 		//Main gateway:
 		do {
 			//Player's options:
@@ -370,7 +402,6 @@ int main() {
 		} while (choice != logout);
 		cout << "Have a nice day " << (*(currentPlayer)).firstName << "." << endl;
 		Sleep(300);
-		system("cls");
 	} while (isPlaying);
 
 	
@@ -382,6 +413,7 @@ void mainProfile(player& user) {
 	char choice;
 	system("cls");
 	cout << "Loading info ..." << endl;
+	Sleep(300);
 	profileData(user);
 
 	//User's choice handler:
@@ -548,6 +580,7 @@ void quizCreate(player& user) {
 
 		//Finishing:
 		cout << "Saving the question ..." << endl;
+		Sleep(300);
 	}
 	
 	user.availableQuestions += numOfQuestions;
