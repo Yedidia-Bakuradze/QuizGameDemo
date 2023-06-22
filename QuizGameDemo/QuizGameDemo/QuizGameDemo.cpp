@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <fstream>
 #include <string.h> 
+#include <windows.h>
 #define _CRT_SECURE_NO_WARNINGS
 #pragma warning(disable: 4996)
 using namespace std;
@@ -22,6 +23,8 @@ struct player {
 	string lastName;
 	string username;
 	long password;
+	char safetyQuestion[100];
+	char safetyAnswer[100];
 	int socre=0;
 	question listOfQuestions[10];
 	int availableQuestions=0;
@@ -275,6 +278,18 @@ int main() {
 				cout << "0-8 letters, no capital letters/numbers" << endl;
 				cin >> listOfPlayers[numOfPlayers].password;
 				
+				//Adding safety question:
+				cout << "Please add a safety question to your account in order to get access to your account once you forget your password." << endl;
+				cout << ">>> ";
+				cin.ignore();
+				cin.getline(listOfPlayers[numOfPlayers].safetyQuestion,99);
+				
+				//Adding safety question:
+				cout << "Please enter the answer for that question:" << endl;
+				cout << ">>> ";
+				cin.getline(listOfPlayers[numOfPlayers].safetyAnswer, 99);
+
+				cout << "Account created succefully." << endl;
 				//Adding another player to our database:
 				numOfPlayers++;
 				system("cls");
@@ -295,7 +310,7 @@ int main() {
 			}
 		}
 		
-		
+		Sleep(300);
 												/*Player's dashboard:*/
 
 		//Welcome message:
@@ -318,36 +333,47 @@ int main() {
 			
 			cout << ">>>";
 			cin >> choice;
-
+			
+			system("cls");
 			switch (choice) {
 			
 			//Profile modification:
 			case profile:
+				Sleep(300);
 				mainProfile((*(currentPlayer)));
+				system("cls");
 				break;
 			//Playing the quiz:
 			case run:
+				Sleep(300);
 				quizPlay((*(currentPlayer)));
+				system("cls");
 				break;
 			//Creating a quiz:
 			case create:
+				Sleep(300);
 				quizCreate((*(currentPlayer)));
+				system("cls");
 				break;
 			//Logging out:
 			case logout:
+				Sleep(300);
+				system("cls");
 				break;
 			//None of the above:21+0-=00
 			default:
 				cout << "Please choose a number between 0 to 3" << endl;
+				system("cls");
 				break;
 			}
 
 		} while (choice != logout);
 		cout << "Have a nice day " << (*(currentPlayer)).firstName << "." << endl;
-
+		Sleep(300);
+		system("cls");
 	} while (isPlaying);
 
-
+	
 	return 0;
 }
 
@@ -368,23 +394,29 @@ void mainProfile(player& user) {
 		case 'y':
 			cout << "Right a way ..." << endl;
 			modifyProfile(user);
+			system("cls");
 			profileData(user);
+			system("cls");
 			break;
 		
 		case 'n':
 			cout << "You'll return to the dashboard with no time." << endl;
+			system("cls");
 			break;
 		
 		default:
 			cout << "Please choose y or n." << endl;
+			system("cls");
 			break;
 		}
 	} while (choice != 'n');
 	cout << "Returning to the dashboard ... " << endl;
+	system("cls");
 }
 
 //Shows the user "all" his personal information:
 void profileData(player& user) {
+	system("cls");
 	//User's profile
 	cout << row;
 	cout << "This is " << user.firstName << "'s profile." << endl;
@@ -412,8 +444,9 @@ void modifyProfile(player& user) {
 
 
 		//The gateway to the profile database:
-		cout << ">>>";
+		cout << ">>> ";
 		cin >> choice;
+		system("cls");
 
 		switch (choice) {
 		case Firstname:
@@ -436,7 +469,9 @@ void modifyProfile(player& user) {
 			
 			//Check if the username is valid.
 			while (userchecksu(newUsername, listOfPlayers) == 10) {
+				system("cls");
 				cout << "Sorry but the username: " << newUsername << " already exsists. Please try different username." << endl;
+				cout << ">>> ";
 				cin >> newUsername;
 			}
 			user.username = newUsername;
@@ -528,7 +563,7 @@ void quizPlay(player& user) {
 
 	//Getting user's choice:
 	do {
-		
+		system("cls");
 		//Instructions to the user:
 		cout << "How would you like to choose your quiz?" << endl;
 		cout << "Press 0 if you want to get a random quiz." << endl;
@@ -537,6 +572,7 @@ void quizPlay(player& user) {
 		cout << ">>>";
 		cin >> choice;
 
+		system("cls");
 		invalidChoice = false;
 		switch (choice) {
 		case byRandom:
@@ -583,6 +619,7 @@ void quizPlay(player& user) {
 			invalidChoice = true;
 				
 		}
+		Sleep(300);
 	} while (invalidChoice);
 
 
@@ -651,6 +688,7 @@ void quizActive(player& user, int adminIndexPosition) {
 
 		} while (!indexChecker(indexes, randomIndex,4));
 
+		Sleep(300);
 		//Checking the given answer.Displaying victory / lost message:
 		if (!strcmp(answers[choice], (*(currentQuestion)).answers[numOfAnswers-1])) {
 			cout << "Well done, you just earnd one point." << endl;
@@ -659,6 +697,7 @@ void quizActive(player& user, int adminIndexPosition) {
 		else
 			cout << "Sorry, but the answer was: " << (*(adminPlayer)).listOfQuestions->answers[numOfAnswers - 1] << " unlike your answer which was: " << answers[choice] << "." << endl;
 
+		Sleep(300);
 		//Deleting the pointers:
 		for (int i = 0; i < numOfAnswers; i++) {
 			delete[] answers[i];
@@ -669,8 +708,8 @@ void quizActive(player& user, int adminIndexPosition) {
 	}
 
 	cout << "Well done you finished the quiz." << endl;
+	Sleep(300);
 	cout << "Returning to the dashboard ..." << endl;
-	
 }
 
 //Checks if the given index position is already been choosed:
