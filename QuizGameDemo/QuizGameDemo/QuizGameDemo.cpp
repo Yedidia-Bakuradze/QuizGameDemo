@@ -433,7 +433,12 @@ void modifyProfile(player& user) {
 		case Username:
 			cout << "Enter your new username: ";
 			cin >> newUsername;
-			/* Check if the username is valid. */
+			
+			//Check if the username is valid.
+			while (userchecksu(newUsername, listOfPlayers) == 10) {
+				cout << "Sorry but the username: " << newUsername << " already exsists. Please try different username." << endl;
+				cin >> newUsername;
+			}
 			user.username = newUsername;
 			break;
 
