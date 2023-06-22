@@ -7,8 +7,6 @@
 #pragma warning(disable: 4996)
 using namespace std;
 
-
-
 //The quiz's components:
 struct question {
 	string author;
@@ -56,14 +54,8 @@ int userCheck(string user, player data[]) {
 	return 10;
 }
 
-
-//Global database:
-
-
-
 //Quiz play system:
 void quizPlay(player& user);
-
 
 //Password checker:
 void passwordRecovery() {
@@ -127,7 +119,6 @@ void passwordRecovery() {
 	
 }
 
-
 //Create a quiz:
 void quizCreate(player& user);
 
@@ -137,12 +128,18 @@ void quizActive(player& user, int adminIndexPosition);
 //Checks if the given index position is already been choosed:
 bool indexChecker(int* indexes, int index, int size);
 
-
-
 string row = "-------------------------------------------------------------------------\n";
 
-
-	
+//Little easter egg:
+void printChabad() {
+	cout << row;
+	for (int i = 0; i < 770; i+=18) {
+		cout << "Chabad all the way down" << endl;
+	}
+	cout << row;
+	Sleep(300);
+	system("cls");
+}
 
 //The "su" in the end of the name means that is a function for "signup" system.
 int userchecksu(string user, player data[]) {
@@ -193,11 +190,10 @@ int main() {
 	int checkvar;//variable to use if we need to check things 
 	//-----------------------------------------------------//
 
-	
 	/* Main game loop: */
 	do {
 
-		
+
 		
 		cout << "_________________________________________________________________________\n\n";
 		cout << "                     Hi, and welcome to trevia world (:                    \n\n";
@@ -218,12 +214,14 @@ int main() {
 			cout << "\t\t|          prees 2 to exit.                |\n" << endl;
 			Sleep(4);
 			cout << "please enter your choice:\n";
+			cout << ">>> ";
 			cin >> choice;
 			
 			//Checks if the choice is valid:
-			while (choice < 0 || choice>3)
+			while (choice < 0 && choice != 770 || choice>3 && choice != 770 )
 			{
 				cout << "please select from the options given above\n";
+				cout << ">>> ";
 				cin >> choice;
 			}
 			
@@ -232,7 +230,8 @@ int main() {
 			case login:
 				system("cls");
 				cout << "Enter your username:" << endl;
-				cin >> username;
+				cout << ">>> ";
+;				cin >> username;
 				
 				playersIndexPosition = userCheck(username, listOfPlayers);
 				checkvar = playersIndexPosition;
@@ -251,6 +250,7 @@ int main() {
 				checkvar = passwordCheck(password, listOfPlayers, playersIndexPosition);
 				if (checkvar == 10) {
 					cout << "The password not match.\nPress 1 to try again:\nPress 2 to change your password:\nPress 3 to back to the main menu" << endl;
+					cout << ">>> ";
 					cin >> choice;
 				}
 				system("cls");
@@ -280,12 +280,17 @@ int main() {
 					else
 						cout << "Sorry but the answer isn't right." << endl;
 					break;
+
+				
 				default:
-					
 					break;
 				}
 				system("cls");
 				
+				break;
+
+			case 770:
+				printChabad();
 				break;
 
 			case signup:
