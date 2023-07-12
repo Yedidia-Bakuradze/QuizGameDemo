@@ -231,7 +231,7 @@ int main() {
 				system("cls");
 				cout << "Enter your username:" << endl;
 				cout << ">>> ";
-;				cin >> username;
+				cin >> username;
 				
 				playersIndexPosition = userCheck(username, listOfPlayers);
 				checkvar = playersIndexPosition;
@@ -252,39 +252,39 @@ int main() {
 					cout << "The password not match.\nPress 1 to try again:\nPress 2 to change your password:\nPress 3 to back to the main menu" << endl;
 					cout << ">>> ";
 					cin >> choice;
-				}
-				system("cls");
-				switch (choice)
-				{
-				case 1:
-					do {
-						cout << "Enter your password:\n";
-						cin >> password;
-						checkvar = passwordCheck(password, listOfPlayers, playersIndexPosition);
-						if (checkvar == 10)
-							cout << "The password doesn't match pls try again:\n";
-
-					} while (checkvar == 10);
-					//User is logged in:
-					userOnline = (checkvar != 10) ?true:false;
 					system("cls");
-					break;
-				case 2:
-					cout << "In order to continue please answer the following safety question:" << endl;
-					cout << listOfPlayers[playersIndexPosition].safetyQuestion << endl;
-					cout << ">>> ";
-					cin.ignore();
-					cin.getline(saftyAnswer, 99);
-					if (!stricmp(saftyAnswer, listOfPlayers[playersIndexPosition].safetyAnswer))
-						passwordRecovery();
-					else
-						cout << "Sorry but the answer isn't right." << endl;
-					break;
-
-				
-				default:
-					break;
+					switch (choice)
+					{
+					case 1:
+						do {
+							cout << "Enter your password:\n";
+							cin >> password;
+							checkvar = passwordCheck(password, listOfPlayers, playersIndexPosition);
+							if (checkvar == 10)
+								cout << "The password doesn't match pls try again:\n";
+	
+						} while (checkvar == 10);
+						system("cls");
+						break;
+					case 2:
+						cout << "In order to continue please answer the following safety question:" << endl;
+						cout << listOfPlayers[playersIndexPosition].safetyQuestion << endl;
+						cout << ">>> ";
+						cin.ignore();
+						cin.getline(saftyAnswer, 99);
+						if (!stricmp(saftyAnswer, listOfPlayers[playersIndexPosition].safetyAnswer))
+							passwordRecovery();
+						else
+							cout << "Sorry but the answer isn't right." << endl;
+						break;
+	
+					
+					default:
+						break;
+					}
 				}
+				//User is logged in:
+				userOnline = (checkvar != 10) ?true:false;
 				system("cls");
 				
 				break;
